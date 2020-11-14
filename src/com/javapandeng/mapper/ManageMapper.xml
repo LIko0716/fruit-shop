@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javapandeng.mapper.ManageMapper">
+
+    <resultMap id="ResultMapMange" type="com.javapandeng.po.Manage">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="userName" jdbcType="VARCHAR"/>
+        <result property="passWord" column="id" jdbcType="VARCHAR"/>
+        <result property="realName" column="id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Manage_field">
+        id,userName,passWord,realName
+    </sql>
+
+    <sql id="Manage_insert">
+        #{id},#{userName},#{passWord},#{realName}
+    </sql>
+
+    <sql id="Manage_if">
+        <if test="id!=null ">
+            id=#{id}
+        </if>
+        <if test="userName!=null ">
+            and userName=#{userName}
+        </if>
+        <if test="passWord!=null ">
+            and passWord=#{passWord}
+        </if>
+        <if test="realName!=null ">
+            and realName=#{realName}
+        </if>
+    </sql>
+
+    <sql id="Manage_update">
+
+        <if test="userName!=null">
+            and userName=#{userName}
+        </if>
+        <if test="passWord!=null">
+            and passWord=#{passWord}
+        </if>
+        <if test="realName!=null">
+            and realName=#{realName}
+        </if>
+    </sql>
+
+    <insert id="insert" parameterType="com.javapandeng.po.Manage" useGeneratedKeys="true" keyProperty="id">
+        insert into manage
+        (
+            <include refid="Manage_field"/>
+        ) values
+        (
+            <include refid="Manage_insert"/>
+        );
+    </insert>
+
+    <!--根据实体主键删除一个实体-->
+    <delete id="deleteById">
+        delete from manage where id= #{id}
+    </delete>
+
+    <!--通过实体删除-->
+    <delete id="deleteByEntity">
+        delete  from manage
+        <where>
+            <include refid="Manage_if"/>
+        </where>
+    </delete>
+    <!--通过map删除-->
+    <delete id="deleteByMap">
+        delete  from manage where 1=1
+        <include refid="Manage_if"/>
+    </delete>
+
+    <!--根据主键获取一个实体-->
+    <select id="load" resultMap="ResultMapMange">
+        select <include refid="Manage_field"/> from manage where id=#{id}
+    </select>
+
+    <select id="getByMap" resultMap="ResultMapMange">
+        select <include refid="Manage_field"/> from manage
+        <where>
+            <include refid="Manage_if"/>
+        </where>
+
+    </select>
+
+    <select id="getByEntity" resultMap="ResultMapMange">
+        select <include refid="Manage_field"/> from manage
+       <where>
+           <include refid="Manage_if"/>
+       </where>
+    </select>
+
+    <!--更新一个实体-->
+    <update id="update">
+        update manage
+        <set>
+            <include refid="Manage_update"/>
+        </set>
+        <where>
+            <include refid="Manage_if"/>
+        </where>
+    </update>
+    <!--根据参数查询-->
+    <select id="listByMap" resultType="com.javapandeng.po.Manage">
+        select <include refid="Manage_field"/> from manage
+        <where>
+            <include refid="Manage_if"/>
+        </where>
+    </select>
+    <!--查询所有实体-->
+    <select id="listAll" resultType="com.javapandeng.po.Manage">
+        select <include refid="Manage_field"/> from manage
+    </select>
+
+    <select id="listAllByEntity" resultType="com.javapandeng.po.Manage">
+        select <include refid="Manage_field"/> from manage
+        <where>
+            <include refid="Manage_if"/>
+        </where>
+    </select>
+    <!--根据主键获取实体-->
+    <select id="getById" resultType="com.javapandeng.po.Manage">
+        select <include refid="Manage_field"/> from manage
+        where id =#{id};
+    </select>
+    <!--批量新增-->
+    <insert id="insertBatch">
+        insert into manage <include refid="Manage_field"/>
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userName},#{item.passWord},#{item.realName})
+        </foreach>
+    </insert>
+
+    <!--批量修改-->
+    <update id="updateBatch">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update manage
+            <set>
+                <if test="item.userName !=null">
+                    userName =#{item.userName},
+                </if>
+                <if test="item.passWord !=null">
+                    passWord =#{item.passWord},
+                </if>
+                <if test="item.realName !=null">
+                    realName =#{item.realName},
+                </if>
+            </set>
+        </foreach>
+    </update>
+
+    <!--查询一个对象返回map-->
+    <!--<select id="getBySqlReturnMap" resultMap="">
+        ${sql}
+    </select>-->
+    <!--查询一个对象返回实体类-->
+   <!-- <select id="getBySqlReturnEntity" resultMap="com.javapandeng.po.Manage">
+        ${sql}
+    </select>-->
+    <!--查询列表返回map-->
+ <!--   <select id="listBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+    &lt;!&ndash;查询列表返回实体&ndash;&gt;d
+    <select id="listBySqlReturnEntity" resultType="com.javapandeng.po.Manage">
+        ${sql}
+    </select>
+    <select id="findBySqlReturnEntity" resultType="com.javapandeng.po.Manage">
+        ${sql}
+    </select>
+-->
+
+
+</mapper>

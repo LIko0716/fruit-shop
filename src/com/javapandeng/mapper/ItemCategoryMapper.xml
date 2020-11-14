@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javapandeng.mapper.ItemCategoryMapper">
+
+    <resultMap id="ResultMapMange" type="com.javapandeng.po.ItemCategory">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="pid" column="pid" jdbcType="INTEGER"/>
+        <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="ItemCategory_field">
+        id,name,pid,isDelete
+    </sql>
+
+    <sql id="ItemCategory_insert">
+        #{id},#{name},#{pid},#{isDelete}
+    </sql>
+
+    <sql id="ItemCategory_if">
+        <if test="id!=null ">
+            id=#{id}
+        </if>
+        <if test="name!=null ">
+            and name=#{name}
+        </if>
+        <if test="pid!=null ">
+            and pid=#{pid}
+        </if>
+        <if test="isDelete!=null ">
+            and isDelete=#{isDelete}
+        </if>
+    </sql>
+
+    <sql id="ItemCategory_update">
+
+        <if test="isDelete!=null">
+            isDelete=#{isDelete},
+        </if>
+        <if test="name!=null">
+            name=#{name},
+        </if>
+        <if test="pid!=null">
+            pid=#{pid}
+        </if>
+    </sql>
+
+    <insert id="insert" parameterType="com.javapandeng.po.ItemCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into item_category
+        (
+        <include refid="ItemCategory_field"/>
+        ) values
+        (
+        <include refid="ItemCategory_insert"/>
+        );
+    </insert>
+
+    <!--根据实体主键删除一个实体-->
+    <delete id="deleteById">
+        delete from item_category where id= #{id}
+    </delete>
+
+    <!--通过实体删除-->
+    <delete id="deleteByEntity">
+        delete  from item_category
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+    </delete>
+    <!--通过map删除-->
+    <delete id="deleteByMap">
+        delete  from item_category where 1=1
+        <include refid="ItemCategory_if"/>
+    </delete>
+
+    <!--根据主键获取一个实体-->
+    <select id="load" resultMap="ResultMapMange">
+        select <include refid="ItemCategory_field"/> from item_category where id=#{id}
+    </select>
+
+    <select id="getByMap" resultMap="ResultMapMange">
+        select <include refid="ItemCategory_field"/> from item_category
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+
+    </select>
+
+    <select id="getByEntity" resultMap="ResultMapMange">
+        select <include refid="ItemCategory_field"/> from item_category
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+    </select>
+
+    <!--通过id更新实体-->
+    <update id="updateById">
+        update item_category
+        <set>
+            <include refid="ItemCategory_update"/>
+        </set>
+        where id =#{id}
+    </update>
+    <!--更新一个实体-->
+    <update id="update">
+        update item_category
+        <set>
+            <include refid="ItemCategory_update"/>
+        </set>
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+    </update>
+    <!--根据参数查询-->
+    <select id="listByMap" resultType="com.javapandeng.po.ItemCategory">
+        select <include refid="ItemCategory_field"/> from item_category
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+    </select>
+    <!--查询所有实体-->
+    <select id="listAll" resultType="com.javapandeng.po.ItemCategory">
+        select <include refid="ItemCategory_field"/> from item_category
+    </select>
+
+    <select id="listAllByEntity" resultType="com.javapandeng.po.ItemCategory">
+        select <include refid="ItemCategory_field"/> from item_category
+        <where>
+            <include refid="ItemCategory_if"/>
+        </where>
+    </select>
+    <!--根据主键获取实体-->
+    <select id="getById" resultType="com.javapandeng.po.ItemCategory">
+        select <include refid="ItemCategory_field"/> from item_category
+        where id =#{id};
+    </select>
+    <!--批量新增-->
+    <insert id="insertBatch">
+        insert into item_category <include refid="ItemCategory_field"/>
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.pid},#{item.isDelete})
+        </foreach>
+    </insert>
+
+    <!--批量修改-->
+    <update id="updateBatch">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update item_category
+            <set>
+                <if test="item.name !=null">
+                    name =#{item.name},
+                </if>
+                <if test="item.pid !=null">
+                    pid =#{item.pid},
+                </if>
+                <if test="item.isDelete !=null">
+                    isDelete =#{item.isDelete},
+                </if>
+            </set>
+        </foreach>
+    </update>
+
+    <!--查询一个对象返回map-->
+    <!--<select id="getBySqlReturnMap" resultMap="">
+        ${sql}
+    </select>-->
+    <!--查询一个对象返回实体类-->
+    <!-- <select id="getBySqlReturnEntity" resultMap="com.javapandeng.po.ItemCategory">
+         ${sql}
+     </select>-->
+    <!--查询列表返回map-->
+    <!--   <select id="listBySqlReturnMap" resultType="map">
+           ${sql}
+       </select>
+       &lt;!&ndash;查询列表返回实体&ndash;&gt;d
+       <select id="listBySqlReturnEntity" resultType="com.javapandeng.po.ItemCategory">
+           ${sql}
+       </select>
+       <select id="findBySqlReturnEntity" resultType="com.javapandeng.po.ItemCategory">
+           ${sql}
+       </select>
+   -->
+    <select id="listBySqlReturnEntity" resultType="com.javapandeng.po.ItemCategory">
+        ${sql}
+    </select>
+    <update id="updateBysql">
+        ${sql}
+    </update>
+    <select id="findBySqlReturnEntity" resultType="com.javapandeng.po.ItemCategory">
+        ${sql}
+    </select>
+    
+</mapper>
